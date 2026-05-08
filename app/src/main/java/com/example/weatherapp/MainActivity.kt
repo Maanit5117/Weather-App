@@ -49,6 +49,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.weatherapp.ui.theme.BlueJC
 import com.example.weatherapp.ui.theme.DarkBlue
 import com.example.weatherapp.ui.theme.WeatherAppTheme
+import com.example.weatherapp.BuildConfig
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -118,7 +119,7 @@ fun WeatherScreen() {
     var city by remember {
         mutableStateOf("")
     }
-    val apiKey = "c145210fab60408e6294e2cb095f4cce"
+    val apiKey = BuildConfig.WEATHER_API_KEY
 
     Box(
         modifier = Modifier
