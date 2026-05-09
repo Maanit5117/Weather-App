@@ -69,7 +69,7 @@ fun WeatherCard(label: String, value: String, icon: ImageVector) {
             .padding(8.dp)
             .size(150.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(5.dp)
+        elevation = CardDefaults.cardElevation(10.dp)
     ) {
         Column(
             modifier = Modifier
@@ -116,6 +116,7 @@ fun WeatherCard(label: String, value: String, icon: ImageVector) {
 fun WeatherScreen() {
     val viewModel: WeatherViewModel = viewModel()
     val weatherData by viewModel.weatherData.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
     var city by remember {
         mutableStateOf("")
     }
@@ -132,12 +133,20 @@ fun WeatherScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(top = 80.dp, start = 16.dp, end = 16.dp, bottom = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
+            Text(
+                text = "Weather App",
+                fontSize = 50.sp,
+                fontWeight = FontWeight.Bold,
+                color = BlueJC,
+                textAlign = TextAlign.Center
+            )
 
-            Spacer(modifier = Modifier.height(250.dp))
+
+            Spacer(modifier = Modifier.height(50.dp))
 
             OutlinedTextField(
                 value = city,
@@ -162,10 +171,21 @@ fun WeatherScreen() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { viewModel.fetchWeather(city, apiKey) },
+                onClick = {
+                    viewModel.fetchWeather(city, apiKey)
+                    android.util.Log.d("DEBUG", "Error: ${viewModel.errorMessage.value}")
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = BlueJC)
             ) {
                 Text(text = "Get Details", color = Color.White)
+            }
+            if (errorMessage.isNotEmpty()) {
+                Text(
+                    text = errorMessage,
+                    color = Color.Red,
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
